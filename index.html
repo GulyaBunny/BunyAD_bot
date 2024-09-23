@@ -3,35 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tahmin Etme Oyunu</title>
+    <title>Şehir Tahmin Etme Oyunu</title>
     <style>
-        body { font-family: Arial, sans-serif; }
-        #game { margin: 20px; }
-        #result { margin-top: 20px; }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+        }
+        #game {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 400px;
+        }
+        img {
+            width: 100%;
+            border-radius: 10px;
+        }
+        input {
+            padding: 10px;
+            margin-top: 10px;
+            width: 80%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 15px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
     </style>
 </head>
 <body>
     <div id="game">
-        <h1>Tahmin Etme Oyunu</h1>
-        <p>1 ile 10 arasında bir sayı tahmin edin:</p>
-        <input type="number" id="guess" min="1" max="10">
+        <h1>Şehir Tahmin Etme Oyunu</h1>
+        <img id="cityImage" src="" alt="Şehir Resmi">
+        <input type="text" id="guess" placeholder="Tahmininizi yazın...">
         <button onclick="checkGuess()">Tahmin Et</button>
         <div id="result"></div>
     </div>
 
     <script>
-        const randomNumber = Math.floor(Math.random() * 10) + 1;
+        const cities = [
+            { name: "İstanbul", image: "https://upload.wikimedia.org/wikipedia/commons/8/8c/Ankara%2C_Turkey%2C_skyline_%282019%29.jpg" },
+            { name: "Paris", image: "https://upload.wikimedia.org/wikipedia/commons/e/e6/Paris_Night.jpg" },
+            { name: "New York", image: "https://upload.wikimedia.org/wikipedia/commons/c/c4/NYC_Skyline_from_Brooklyn_Heights.jpg" },
+            { name: "Tokyo", image: "https://upload.wikimedia.org/wikipedia/commons/8/80/Tokyo_Tower_%28cropped%29.jpg" },
+            { name: "Londra", image: "https://upload.wikimedia.org/wikipedia/commons/e/e3/London_Skyline.jpg" },
+            { name: "Berlin", image: "https://upload.wikimedia.org/wikipedia/commons/1/12/Berlin_Skyline.jpg" },
+            { name: "Moskova", image: "https://upload.wikimedia.org/wikipedia/commons/8/83/Moscow_City_skyline_%28cropped%29.jpg" },
+            { name: "Roma", image: "https://upload.wikimedia.org/wikipedia/commons/1/1a/Rome_Skyline.jpg" },
+            { name: "Madrid", image: "https://upload.wikimedia.org/wikipedia/commons/d/dc/Madrid_Skyline.jpg" },
+            { name: "Sydney", image: "https://upload.wikimedia.org/wikipedia/commons/4/4c/Sydney_Skyline_at_Dusk.jpg" },
+            { name: "Kahire", image: "https://upload.wikimedia.org/wikipedia/commons/c/c4/Cairo_Skyline.jpg" },
+            { name: "Şanghay", image: "https://upload.wikimedia.org/wikipedia/commons/c/c8/Shanghai_Skyline.jpg" },
+            { name: "Toronto", image: "https://upload.wikimedia.org/wikipedia/commons/4/45/Toronto_Skyline.jpg" },
+            { name: "Los Angeles", image: "https://upload.wikimedia.org/wikipedia/commons/a/a9/Los_Angeles_Skyline.jpg" },
+            { name: "Singapur", image: "https://upload.wikimedia.org/wikipedia/commons/e/e1/Singapore_Skyline.jpg" },
+            { name: "Buenos Aires", image: "https://upload.wikimedia.org/wikipedia/commons/a/a0/Buenos_Aires_Skyline.jpg" }
+        ];
+
+        let currentCityIndex = Math.floor(Math.random() * cities.length);
+        const cityImage = document.getElementById('cityImage');
+        const resultDiv = document.getElementById('result');
+
+        function loadCity() {
+            cityImage.src = cities[currentCityIndex].image;
+            resultDiv.textContent = '';
+            document.getElementById('guess').value = '';
+        }
 
         function checkGuess() {
-            const userGuess = Number(document.getElementById('guess').value);
-            const resultDiv = document.getElementById('result');
-
-            if (userGuess === randomNumber) {
+            const userGuess = document.getElementById('guess').value.trim();
+            if (userGuess.toLowerCase() === cities[currentCityIndex].name.toLowerCase()) {
                 resultDiv.textContent = 'Tebrikler! Doğru tahmin ettiniz.';
             } else {
-                resultDiv.textContent = 'Yanlış tahmin. Tekrar deneyin!';
+                resultDiv.textContent = `Yanlış tahmin! Doğru cevap: ${cities[currentCityIndex].name}.`;
             }
+            currentCityIndex = Math.floor(Math.random() * cities.length);
+            setTimeout(loadCity, 2000);
         }
+
+        loadCity();
     </script>
 </body>
 </html>
